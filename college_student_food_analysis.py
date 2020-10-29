@@ -1,9 +1,24 @@
 import csv
+from collections import namedtuple
 
 
 # Group your data
-def group_values_with_columns():
-    return
+def group_values_with_columns(data, col_req, **kwargs):
+    Student = namedtuple('Student', 'GPA Gender drink exercise fries income sports weight')
+    columns_index = [data[0].index(name) for name in col_req]
+
+    if kwargs:
+        individuals = data[1:kwargs['n'] + 1]
+    else:
+        individuals = data[1:51]  # 50 by default
+
+    grouped_data = []  # list of tuples of columns and values
+
+    for individual in individuals:
+        value = [individual[i] for i in columns_index]
+        grouped_data.append(Student._make(value))
+
+    return grouped_data
 
 
 # Get length of a particular list
@@ -106,7 +121,11 @@ with open('food.csv', newline='') as f:
     reader = csv.reader(f)
     data = list(reader)  # contains the data in the raw format.
 
+
 # Columns you'll deal with in this project
 required_columns = ['GPA', 'Gender', 'drink', 'exercise', 'fries', 'income', 'sports', 'weight']
 
 # Start calling the functions
+grouped_data = group_values_with_columns(data, required_columns, n=50)
+for entry in grouped_data:
+    print(entry)
