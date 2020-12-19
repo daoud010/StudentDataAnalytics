@@ -23,29 +23,42 @@ def group_values_with_columns(data, col_req, **kwargs):
 
 # Get length of a particular list
 def count(func):
-    return
+    def wrapper(*args):
+        result = func(*args)
+        result = len(result)
+        return result
+
+    return wrapper
 
 
 # Get females from the grouped_data
 @count
-def get_females():
-    return
+def get_females(data):
+    return [entry for entry in data if entry.Gender == "1"]
 
 
 # Get males from the grouped_data
 @count
-def get_males():
-    return
+def get_males(data):
+    return [entry for entry in data if entry.Gender == "2"]
 
 
 # Count using dictionaries how many people associate drink with soda and orange juice
 def drink_stats(data):
-    return
+    drink_count = {}
+
+    for item in data:
+        if item.drink in drink_count:
+            drink_count[item.drink] += 1
+        else:
+            drink_count[item.drink] = 1
+    return drink_count
 
 
 # Collecting exercise stats
 def exercise_stats(data, x):
-    return
+    pattern_count = [entry for entry in data if entry.exercise == x]
+    return get_males(pattern_count), get_females(pattern_count)
 
 
 # Students loving Mcdonalds fries
@@ -121,11 +134,15 @@ with open('food.csv', newline='') as f:
     reader = csv.reader(f)
     data = list(reader)  # contains the data in the raw format.
 
-
 # Columns you'll deal with in this project
 required_columns = ['GPA', 'Gender', 'drink', 'exercise', 'fries', 'income', 'sports', 'weight']
 
 # Start calling the functions
-grouped_data = group_values_with_columns(data, required_columns, n=50)
+grouped_data = group_values_with_columns(data, required_columns, n=60)
 for entry in grouped_data:
     print(entry)
+print(get_females(grouped_data))
+print(get_males(grouped_data))
+print(drink_stats(grouped_data))
+print(exercise_stats(grouped_data, '1'))
+print(exercise_stats(grouped_data, '2'))
