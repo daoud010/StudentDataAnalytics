@@ -62,7 +62,7 @@ def exercise_stats(data, x):
 
 
 # Students loving Mcdonalds fries
-# Mcdonalds_fries = ...
+Mcdonalds_fries = count(lambda my_data: [x for x in my_data if x.fries == '1'])
 
 #  Maintaining academia and jobs
 # bright_students = ...
@@ -146,3 +146,4 @@ print(get_males(grouped_data))
 print(drink_stats(grouped_data))
 print(exercise_stats(grouped_data, '1'))
 print(exercise_stats(grouped_data, '2'))
+print(Mcdonalds_fries(grouped_data))
