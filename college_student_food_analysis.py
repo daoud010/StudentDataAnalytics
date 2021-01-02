@@ -1,5 +1,5 @@
 import csv
-from collections import namedtuple
+from collections import namedtuple, defaultdict, Counter
 
 
 # Group your data
@@ -65,12 +65,32 @@ def exercise_stats(data, x):
 Mcdonalds_fries = count(lambda my_data: [x for x in my_data if x.fries == '1'])
 
 #  Maintaining academia and jobs
-# bright_students = ...
+bright_students = lambda my_data: [x for x in my_data if x.GPA > '3' and (x.income == '5' or x.income == '6')]
 
 
 # Collecting weight stats
 def weight_stats(data, x):
-    return
+    weight_stats_dict = defaultdict(int)
+
+    for student in data:
+        if student.weight.isnumeric():
+            weight_stats_dict[student.weight] += 1
+
+    print(weight_stats_dict)
+
+    weight_stats_count = Counter(weight_stats_dict)
+
+    most_common_weight = weight_stats_count.most_common(x)
+    print(most_common_weight)
+    most_weight_result = [i[0] for i in most_common_weight]
+
+    least_common_weight = weight_stats_count.most_common()[:-x - 1:-1]
+    least_weight_result = [i[0] for i in least_common_weight]
+
+    common_weight_females = get_females([entry for entry in data if entry.weight in most_weight_result])
+    least_weight_males = get_males([entry for entry in data if entry.weight in least_weight_result])
+
+    return common_weight_females, least_weight_males
 
 
 # Cleaning anomalies in weight
@@ -147,3 +167,5 @@ print(drink_stats(grouped_data))
 print(exercise_stats(grouped_data, '1'))
 print(exercise_stats(grouped_data, '2'))
 print(Mcdonalds_fries(grouped_data))
+students = bright_students(grouped_data)
+print(weight_stats(grouped_data, 2))
