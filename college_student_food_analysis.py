@@ -81,56 +81,101 @@ def weight_stats(data, x):
     weight_stats_count = Counter(weight_stats_dict)
 
     most_common_weight = weight_stats_count.most_common(x)
-    print(most_common_weight)
     most_weight_result = [i[0] for i in most_common_weight]
 
     least_common_weight = weight_stats_count.most_common()[:-x - 1:-1]
     least_weight_result = [i[0] for i in least_common_weight]
 
-    common_weight_females = get_females([entry for entry in data if entry.weight in most_weight_result])
-    least_weight_males = get_males([entry for entry in data if entry.weight in least_weight_result])
+    most_common_weight_v2 = [key for key in weight_stats_dict if weight_stats_dict[key] ==
+                             max(weight_stats_dict.values())]
+    least_common_weight_v2 = [key for key in weight_stats_dict if weight_stats_dict[key] ==
+                              min(weight_stats_dict.values())]
+
+    common_weight_females = get_females([entry for entry in data if entry.weight in most_common_weight_v2])
+    least_weight_males = get_males([entry for entry in data if entry.weight in least_common_weight_v2])
 
     return common_weight_females, least_weight_males
 
 
 # Cleaning anomalies in weight
 def weight_cleaner(func):
-    return
+    def wrapper(*args):
+        result = func(*args)
+        result = [weight_data for weight_data in result if entry.weight.isnumeric()]
+        return result
+    return wrapper
 
 
 # Cleaning anomalies in sports
 def sports_cleaner(func):
-    return
+    def wrapper(*args):
+        result = func(*args)
+        result = [sports_data for sports_data in result if sports_data.sports == '1' or sports_data.sports == '2']
+        return result
+
+    return wrapper
 
 
 # Cleaning anomalies in income
 def income_cleaner(func):
-    return
+    def wrapper(*args):
+        result = func(*args)
+        l = ['1', '2', '3', '4', '5', '6']
+        result = [income_data for income_data in result if income_data.income in l]
+        return result
+
+    return wrapper
 
 
 # Cleaning anomalies in fries
 def fries_cleaner(func):
-    return
+    def wrapper(*args):
+        result = func(*args)
+        result = [fries_data for fries_data in result if fries_data.fries == '1' or fries_data.fries == '2']
+        return result
+
+    return wrapper
 
 
 # Cleaning anomalies in exercise
 def exercise_cleaner(func):
-    return
+    def wrapper(*args):
+        result = func(*args)
+        l = ['1', '2', '3', '4', '5']
+
+        result = [exercise_data for exercise_data in result if exercise_data in l]
+        return result
+
+    return wrapper
 
 
 # Cleaning anomalies in drink
 def drink_cleaner(func):
-    return
+    def wrapper(*args):
+        result = func(*args)
+        result = [drink_data for drink_data in result if drink_data.drink == '1' or drink_data.drink == '2']
+        return result
+
+    return wrapper
 
 
 # Cleaning anomalies in gender
 def gender_cleaner(func):
-    return
+    def wrapper(*args):
+        result = func(*args)
+        result = [gender_info for gender_info in result if gender_info.Gender == '1' or gender_info.Gender == '2']
+        return result
+
+    return wrapper
 
 
 # Cleaning anomalies in GPA
 def gpa_cleaner(func):
-    return
+    def wrapper(*args):
+        result = func(*args)
+        result = [gpa_data for gpa_data in result if gpa_data.GPA.replace('.', '1').isnumeric()]
+        return result
+    return wrapper
 
 
 # Cleaning the dataset
@@ -143,7 +188,7 @@ def gpa_cleaner(func):
 @gender_cleaner
 @gpa_cleaner
 def clean_data(grouped_data):
-    return
+    return grouped_data
 
 
 # ________________________________________________________________________________#
